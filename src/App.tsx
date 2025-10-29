@@ -10,6 +10,7 @@ import Upload from "./pages/Upload";
 import Policies from "./pages/Policies";
 import Analyses from "./pages/Analyses";
 import NotFound from "./pages/NotFound";
+import worldlineLogo from "@/assets/worldline-logo.svg";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +26,7 @@ const App = () => (
             <main className="flex-1 overflow-auto">
               <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background px-6">
                 <SidebarTrigger />
+                <img src={worldlineLogo} alt="Worldline" className="h-6 w-auto" />
                 <h2 className="text-lg font-semibold">Contract Derisking System</h2>
               </header>
               <div className="p-6">

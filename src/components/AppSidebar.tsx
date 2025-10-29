@@ -11,6 +11,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import worldlineLogo from "@/assets/worldline-logo.svg";
 
 const navItems = [
   { title: "Dashboard", url: "/", icon: Home },
@@ -25,6 +26,13 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon">
       <SidebarContent>
+        <div className="p-4 border-b border-sidebar-border">
+          <img 
+            src={worldlineLogo} 
+            alt="Worldline" 
+            className="h-8 w-auto"
+          />
+        </div>
         <SidebarGroup>
           <SidebarGroupLabel className="text-sidebar-foreground/60">
             Contract Derisking
