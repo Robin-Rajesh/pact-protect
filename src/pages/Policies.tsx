@@ -61,27 +61,63 @@ export default function Policies() {
   ]);
 
   const [labels, setLabels] = useState<PolicyLabel[]>([
-    {
-      id: "1",
-      name: "Financial",
-      parentLabelId: null,
-      color: "#22c55e",
-      policyIds: ["3"],
-    },
-    {
-      id: "2",
-      name: "Legal",
-      parentLabelId: null,
-      color: "#ef4444",
-      policyIds: ["1", "2"],
-    },
-    {
-      id: "3",
-      name: "Compliance",
-      parentLabelId: "2",
-      color: "#f97316",
-      policyIds: [],
-    },
+    // Financial
+    { id: "1", name: "Financial", parentLabelId: null, color: "#22c55e", policyIds: ["3"] },
+    { id: "1.1", name: "Payment Terms", parentLabelId: "1", color: "#16a34a", policyIds: ["3"] },
+    { id: "1.2", name: "Pricing & Discounts", parentLabelId: "1", color: "#16a34a", policyIds: [] },
+    { id: "1.3", name: "Taxation", parentLabelId: "1", color: "#16a34a", policyIds: [] },
+    { id: "1.4", name: "Invoicing", parentLabelId: "1", color: "#16a34a", policyIds: [] },
+    { id: "1.5", name: "Currency/Exchange Clauses", parentLabelId: "1", color: "#16a34a", policyIds: [] },
+
+    // Legal
+    { id: "2", name: "Legal", parentLabelId: null, color: "#ef4444", policyIds: ["1", "2"] },
+    { id: "2.1", name: "Jurisdiction & Governing Law", parentLabelId: "2", color: "#dc2626", policyIds: [] },
+    { id: "2.2", name: "Liability & Indemnity", parentLabelId: "2", color: "#dc2626", policyIds: ["1", "2"] },
+    { id: "2.3", name: "Confidentiality", parentLabelId: "2", color: "#dc2626", policyIds: [] },
+    { id: "2.4", name: "Force Majeure", parentLabelId: "2", color: "#dc2626", policyIds: [] },
+    { id: "2.5", name: "Termination Clauses", parentLabelId: "2", color: "#dc2626", policyIds: [] },
+    { id: "2.6", name: "Arbitration & Dispute Resolution", parentLabelId: "2", color: "#dc2626", policyIds: [] },
+
+    // Compliance
+    { id: "3", name: "Compliance", parentLabelId: null, color: "#f97316", policyIds: [] },
+    { id: "3.1", name: "Data Privacy (GDPR/PCI-DSS)", parentLabelId: "3", color: "#ea580c", policyIds: [] },
+    { id: "3.2", name: "Anti-Money Laundering (AML)", parentLabelId: "3", color: "#ea580c", policyIds: [] },
+    { id: "3.3", name: "Know Your Customer (KYC)", parentLabelId: "3", color: "#ea580c", policyIds: [] },
+    { id: "3.4", name: "Sanctions & Export Controls", parentLabelId: "3", color: "#ea580c", policyIds: [] },
+    { id: "3.5", name: "Ethical Conduct", parentLabelId: "3", color: "#ea580c", policyIds: [] },
+
+    // Operational
+    { id: "4", name: "Operational", parentLabelId: null, color: "#3b82f6", policyIds: [] },
+    { id: "4.1", name: "Service Level Agreements (SLA)", parentLabelId: "4", color: "#2563eb", policyIds: [] },
+    { id: "4.2", name: "Performance Metrics", parentLabelId: "4", color: "#2563eb", policyIds: [] },
+    { id: "4.3", name: "Delivery & Acceptance", parentLabelId: "4", color: "#2563eb", policyIds: [] },
+    { id: "4.4", name: "Maintenance Obligations", parentLabelId: "4", color: "#2563eb", policyIds: [] },
+
+    // Security
+    { id: "5", name: "Security", parentLabelId: null, color: "#a855f7", policyIds: [] },
+    { id: "5.1", name: "Data Encryption", parentLabelId: "5", color: "#9333ea", policyIds: [] },
+    { id: "5.2", name: "Access Control", parentLabelId: "5", color: "#9333ea", policyIds: [] },
+    { id: "5.3", name: "Security Breach Response", parentLabelId: "5", color: "#9333ea", policyIds: [] },
+    { id: "5.4", name: "Third-Party Security Requirements", parentLabelId: "5", color: "#9333ea", policyIds: [] },
+
+    // Risk & Audit
+    { id: "6", name: "Risk & Audit", parentLabelId: null, color: "#eab308", policyIds: [] },
+    { id: "6.1", name: "Insurance Coverage", parentLabelId: "6", color: "#ca8a04", policyIds: [] },
+    { id: "6.2", name: "Risk Assessment Clauses", parentLabelId: "6", color: "#ca8a04", policyIds: [] },
+    { id: "6.3", name: "Audit Rights", parentLabelId: "6", color: "#ca8a04", policyIds: [] },
+    { id: "6.4", name: "Reporting Obligations", parentLabelId: "6", color: "#ca8a04", policyIds: [] },
+
+    // Intellectual Property
+    { id: "7", name: "Intellectual Property", parentLabelId: null, color: "#ec4899", policyIds: [] },
+    { id: "7.1", name: "IP Ownership", parentLabelId: "7", color: "#db2777", policyIds: [] },
+    { id: "7.2", name: "Licensing", parentLabelId: "7", color: "#db2777", policyIds: [] },
+    { id: "7.3", name: "Patent/Trademark Protection", parentLabelId: "7", color: "#db2777", policyIds: [] },
+
+    // Environmental & Sustainability
+    { id: "8", name: "Environmental & Sustainability", parentLabelId: null, color: "#14b8a6", policyIds: [] },
+    { id: "8.1", name: "Waste Management", parentLabelId: "8", color: "#0d9488", policyIds: [] },
+    { id: "8.2", name: "Green Procurement", parentLabelId: "8", color: "#0d9488", policyIds: [] },
+    { id: "8.3", name: "ESG Commitments", parentLabelId: "8", color: "#0d9488", policyIds: [] },
   ]);
 
   const [selectedLabelId, setSelectedLabelId] = useState<string | null>(null);
