@@ -217,7 +217,7 @@ export default function Policies() {
   return (
     <div className="flex gap-6">
       {/* Label Sidebar */}
-      <Card className="w-64 flex-shrink-0 h-fit sticky top-6">
+      <Card className="w-80 flex-shrink-0 h-fit sticky top-6">
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="text-lg flex items-center gap-2">

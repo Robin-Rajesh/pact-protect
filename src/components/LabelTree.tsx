@@ -8,6 +8,12 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface LabelTreeProps {
   labels: PolicyLabel[];
@@ -66,8 +72,19 @@ export function LabelTree({ labels, selectedLabelId, onSelectLabel, onDeleteLabe
                 className="h-3 w-3 rounded-full flex-shrink-0"
                 style={{ backgroundColor: label.color }}
               />
-              <span className="text-sm flex-1 truncate">{label.name}</span>
-              <span className="text-xs text-muted-foreground">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span className="text-sm flex-1 break-words leading-tight">
+                      {label.name}
+                    </span>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{label.name}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+              <span className="text-xs text-muted-foreground flex-shrink-0">
                 {label.policyIds.length}
               </span>
             </div>
