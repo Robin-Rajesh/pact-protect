@@ -378,6 +378,7 @@ export default function Policies() {
 
   const [open, setOpen] = useState(false);
   const [editingPolicy, setEditingPolicy] = useState<Policy | null>(null);
+  const [labelSearchQuery, setLabelSearchQuery] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -399,6 +400,7 @@ export default function Policies() {
   const resetForm = () => {
     setFormData({ name: "", description: "", riskLevel: "medium", labelIds: [] });
     setEditingPolicy(null);
+    setLabelSearchQuery("");
   };
 
   const handleEdit = (policy: Policy) => {
@@ -468,6 +470,10 @@ export default function Policies() {
     ? policies.filter(p => p.labelIds.includes(selectedLabelId))
     : policies;
 
+  const filteredLabelsForDialog = labels.filter(label =>
+    label.name.toLowerCase().includes(labelSearchQuery.toLowerCase())
+  );
+
   return (
     <div className="flex gap-6">
       {/* Label Sidebar */}
@@ -535,7 +541,7 @@ export default function Policies() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="description">Description</Label>
+                    <Label htmlFor="description">Policy Statement</Label>
                     <Textarea
                       id="description"
                       value={formData.description}
@@ -564,11 +570,19 @@ export default function Policies() {
 
                   <div className="space-y-2">
                     <Label>Assign Labels</Label>
+                    <Input
+                      placeholder="Search labels..."
+                      value={labelSearchQuery}
+                      onChange={(e) => setLabelSearchQuery(e.target.value)}
+                      className="mb-2"
+                    />
                     <div className="border rounded-md p-3 max-h-48 overflow-y-auto space-y-2">
                       {labels.length === 0 ? (
                         <p className="text-sm text-muted-foreground">No labels available. Create labels first.</p>
+                      ) : filteredLabelsForDialog.length === 0 ? (
+                        <p className="text-sm text-muted-foreground">No labels match your search.</p>
                       ) : (
-                        labels.map(label => (
+                        filteredLabelsForDialog.map(label => (
                           <div key={label.id} className="flex items-center space-x-2">
                             <Checkbox
                               id={`label-${label.id}`}
