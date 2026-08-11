@@ -3,6 +3,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Upload as UploadIcon, FileText } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { uploadContract, analyze } from "@/services/analysis";
+import { buildCompiledPolicy } from "@/policy/buildPolicy";
 
 export default function Upload() {
   const [file, setFile] = useState<File | null>(null);
@@ -29,17 +31,25 @@ export default function Upload() {
 
     setUploading(true);
     try {
-      // TODO: Implement upload logic with Lovable Cloud
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      const { analysis_id, total_clauses, ocr_info } = await uploadContract(file);
+      // Compile policy from the Policy Library and include it in analysis
+      const compiledPolicy = buildCompiledPolicy({ policyId: "ui_policy_v1", riskThreshold: 15 });
+      const result = await analyze({ analysis_id, policy: compiledPolicy });
+      
+      let description = `Analyzed ${result.total_clauses} clauses`;
+      if (ocr_info?.used) {
+        description += ` (OCR used: ${ocr_info.characters} characters from ${ocr_info.pages} page${ocr_info.pages > 1 ? 's' : ''})`;
+      }
+      
       toast({
-        title: "Upload successful",
-        description: "Contract analysis has been started",
+        title: "Analysis complete",
+        description,
       });
       setFile(null);
     } catch (error) {
       toast({
         title: "Upload failed",
-        description: "Please try again",
+        description: error instanceof Error ? error.message : "Please try again",
         variant: "destructive",
       });
     } finally {

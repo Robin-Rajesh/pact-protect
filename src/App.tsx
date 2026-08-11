@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import Upload from "./pages/Upload";
 import Policies from "./pages/Policies";
 import Analyses from "./pages/Analyses";
+import AnalysisDetail from "./pages/AnalysisDetail";
 import NotFound from "./pages/NotFound";
 import worldlineLogo from "@/assets/worldline-logo.svg";
 
@@ -35,6 +36,7 @@ const App = () => (
                   <Route path="/upload" element={<Upload />} />
                   <Route path="/policies" element={<Policies />} />
                   <Route path="/analyses" element={<Analyses />} />
+                  <Route path="/analyses/:id" element={<AnalysisDetail />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </div>
