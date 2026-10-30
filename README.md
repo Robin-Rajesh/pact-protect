@@ -1,73 +1,89 @@
-# Welcome to your Lovable project
+# 🛡️ Pact Protect: AI Contract Derisking System
 
-## Project info
+A full-stack application that reads legal contracts, splits them into clauses, and uses LLMs to flag risky terms, check them against configurable policies, and suggest safer wording.
 
-**URL**: https://lovable.dev/projects/53f606ec-68fa-456d-954a-d328f765ffb0
+![React](https://img.shields.io/badge/React-TypeScript-3178C6?logo=typescript&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white)
+![LangChain](https://img.shields.io/badge/LangChain-1C3C3C)
+![Qdrant](https://img.shields.io/badge/Qdrant-DC244C)
+![Tesseract](https://img.shields.io/badge/Tesseract_OCR-5A5A5A)
 
-## How can I edit this code?
+## ✨ Features
 
-There are several ways of editing your application.
+- **Document upload and parsing**: PDF, TXT and image files, single or batch. Scanned PDFs and images go through Tesseract OCR automatically when little text can be extracted.
+- **Clause-level risk analysis**: each clause is classified by an LLM and rated High / Medium / Low risk.
+- **Policy engine**: evaluate contracts against a default policy covering Financial, Legal, Operational, Privacy, Security and IP domains, or define your own policies and risk weights.
+- **RAG context**: clauses are embedded with `all-MiniLM-L6-v2` and stored in Qdrant, so similar clauses can be retrieved as context during analysis.
+- **AI recommendations**: get alternative wording for high-risk clauses.
+- **Executive summaries** and a **chat assistant** that answers questions about a specific contract.
+- **Contract comparison**: compare two analyzed contracts side by side and see which one is safer.
+- **Switchable LLM providers**: Groq or a local Ollama model, configured from the settings page.
 
-**Use Lovable**
+## 🏗️ Architecture
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/53f606ec-68fa-456d-954a-d328f765ffb0) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```
+React + Vite + shadcn/ui  ──HTTP──▶  FastAPI backend
+                                      ├── parser.py        (pypdf, Poppler, Tesseract OCR)
+                                      ├── policy.py        (policy rules and compliance)
+                                      ├── rag.py           (Qdrant + sentence-transformers)
+                                      ├── llm_providers.py (Groq / Ollama via LangChain)
+                                      └── store.py         (local JSON store)
 ```
 
-**Edit a file directly in GitHub**
+See [`architecture.md`](architecture.md) for the full process flow of each feature.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 🔌 API Overview
 
-**Use GitHub Codespaces**
+| Endpoint | Purpose |
+|---|---|
+| `POST /upload`, `POST /upload/batch` | Upload and parse contracts |
+| `POST /analyze` | Run clause risk analysis against a policy |
+| `POST /recommend` | Suggest safer wording for a clause |
+| `POST /summary/{analysis_id}` | Generate an executive summary |
+| `POST /chat` | Ask questions about a contract |
+| `POST /compare` | Compare two analyzed contracts |
+| `GET/POST /policy`, `GET /policies` | Manage policies |
+| `GET/POST /settings`, `GET /settings/test` | Configure and test LLM providers |
+| `GET /rag/status` | Check the vector store |
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## 🚀 Getting Started
 
-## What technologies are used for this project?
+**Prerequisites:** Node.js 18+, Python 3.9+, Tesseract OCR and Poppler (see [`TESSERACT_SETUP.md`](TESSERACT_SETUP.md)). Qdrant is optional and only needed for RAG.
 
-This project is built with:
+**Backend**
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+```bash
+cd backend
+python -m venv .venv
+source .venv/bin/activate        # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+export GROQ_API_KEY=your_key     # or configure Ollama in the app settings
+uvicorn app.main:app --reload --port 8000
+```
 
-## How can I deploy this project?
+Optional environment variables: `QDRANT_URL` (default `http://localhost:6333`), `QDRANT_COLLECTION`, `EMBEDDING_MODEL`.
 
-Simply open [Lovable](https://lovable.dev/projects/53f606ec-68fa-456d-954a-d328f765ffb0) and click on Share -> Publish.
+**Frontend**
 
-## Can I connect a custom domain to my Lovable project?
+```bash
+npm install
+npm run dev                      # http://localhost:8080
+```
 
-Yes, you can!
+On Windows, `run_project.bat` starts both servers (edit the paths inside it first).
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+For a step-by-step setup, see [`INSTALLATION_GUIDE.md`](INSTALLATION_GUIDE.md). OCR details are in [`OCR_FEATURES.md`](OCR_FEATURES.md).
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+## 📂 Project Structure
+
+```
+backend/app/        FastAPI app, parser, policy engine, RAG and LLM providers
+backend/data/       Saved analyses and policies
+src/pages/          Dashboard, Upload, Analyses, AnalysisDetail, Policies
+src/services/       API client
+docs_int/           Sample contracts for testing
+```
+
+## 🧪 Sample Data
+
+`docs_int/` contains sample service agreements, including deliberately flawed ones, for trying out the risk analysis.
